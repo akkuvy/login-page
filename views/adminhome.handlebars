@@ -1,0 +1,67 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form method="POST" action="/adminlogout" style="display: inline;">
+                <button type="submit" class="btn btn-danger float-right mt-3">Log out</button>
+            </form>
+            <h1 class="text-center mt-3">Welcome Admin</h1>
+            <h2 class=" mt-5">Manage users</h2>
+            <form>
+                <div class="input-group mb-3">
+                    <input type="text" id="myInput" name="username" onkeyup="mysearch()" class="form-control"
+                        placeholder="Search for username">
+                </div>
+            </form>
+            <table class="table table-dark table-hover " id="myTable">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col" style="padding-left: 3em;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each users}}
+                    <tr>
+                        <th scope="row">{{this.id}}</th>
+                        <td>{{this.name}}</td>
+                        <td>{{this.email}}</td>
+                        <td>
+                            <form method="POST" action="/useredit" style="display: inline;">
+                                <input type="hidden" name="email" value="{{this.email}}">
+                                <button type="submit" class="btn btn-info">Edit</button>
+                            </form>
+                            <form method="POST" action="/deleteuser?_method=DELETE" style="display: inline;">
+                                <input type="hidden" name="email" value="{{this.email}}">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    function mysearch() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+</script>
