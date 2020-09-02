@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <form method="POST" action="/adminlogout" style="display: inline;">
+            <form method="POST" action="/admin/adminlogout" style="display: inline;">
                 <button type="submit" class="btn btn-danger float-right mt-3">Log out</button>
             </form>
             <h1 class="text-center mt-3">Welcome Admin</h1>
@@ -28,11 +28,11 @@
                         <td>{{this.name}}</td>
                         <td>{{this.email}}</td>
                         <td>
-                            <form method="POST" action="/useredit" style="display: inline;">
-                                <input type="hidden" name="email" value="{{this.email}}">
+                            <form method="POST" action="/admin/useredit" style="display: inline;">
+                                <input type="hidden" name="id" value="{{this.id}}">
                                 <button type="submit" class="btn btn-info">Edit</button>
                             </form>
-                            <form method="POST" action="/deleteuser?_method=DELETE" style="display: inline;">
+                            <form method="POST" action="/admin/deleteuser?_method=DELETE" style="display: inline;">
                                 <input type="hidden" name="email" value="{{this.email}}">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>

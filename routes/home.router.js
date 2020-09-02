@@ -21,21 +21,6 @@ const protectHome = (req, res, next) => {
     }
 }
 
-const protectadmin = (req,res,next) =>{
-    if(!req.session.emailid){
-        res.redirect('/admin');
-    }else{
-        next();
-    }
-}
-
-const redirecttoadminDashboard = (req, res, next) => {
-    if (req.session.emailid) {
-        res.redirect('/adminhome');
-    } else {
-        next();
-    }
-}
 
 
 router.get('/', redirecttoDashboard, (req, res) => {
@@ -54,64 +39,6 @@ router.get('/login', redirecttoDashboard, (req, res) => {
 router.get('/register', redirecttoDashboard, (req, res) => {
     res.render('register',{title :'Register User'});
 });
-
-router.get('/admin', redirecttoadminDashboard,(req, res) => {
-    res.render('adminlogin',{title :'Admin login'});
-})
-router.get('/adminhome', protectadmin, (req, res) => {
-    Users.find({}).lean()
-        .exec((err, data) => { 
-            res.render('adminhome', { users: data ,title :'Admin Page'});
-        })
-})
-
-
-
-router.post('/admin', (req, res) => {
-    const { email, password } = admin;
-    if(req.body.email == email && req.body.password == password){
-        req.session.emailid = req.body.email;
-        res.redirect('/adminhome');
-    }else{
-        const msg = 'Invalid Password';
-        res.render('adminlogin', { msg });
-    }
-})
-router.post('/useredit', (req, res) => {
-    const email = req.body.email;
-    Users.findOne({ email: email }).lean()
-        .exec((err, data) => {
-            res.render('adminedit', { user: data });
-        })
-})
-
-router.put('/usereditsave', (req, res) => {
-    const { id, email, name, password } = req.body;
-    const data = {
-        id,
-        email,
-        name,
-        password
-    }
-    Users.updateOne({ email: email }, data, (err, docs) => {
-        if (err) throw err;
-        res.redirect("/adminhome");
-    })
-})
-
-router.delete('/deleteuser', (req, res) => {
-    const email = req.body.email;
-    Users.deleteOne({ email: email }, (err) => {
-        if (err) throw err;
-        res.redirect("/adminhome");
-    })
-})
-
-router.post('/adminlogout', (req, res) => {
-    req.session.destroy();
-    res.clearCookie("sid");
-    res.redirect("/login");
-})
 
 router.post('/register', (req, res) => {
     const newUser = {
