@@ -2,7 +2,7 @@ const express = require('express');
 const sessions = require('express-session');
 const exphbs = require('express-handlebars');
 const { urlencoded } = require('express');
-const PORT = process.env.PORT || 3121;
+const PORT = process.env.PORT || 3000;
 const homerouter = require('./routes/home.router');
 const mongoose = require('mongoose');
 const mongoStore = require('connect-mongo')(sessions);
@@ -31,12 +31,13 @@ app.use(sessions({
     cookie :{maxAge : 1000*60*60*24}
 }));
 
+app.use((req, res, next) => {
+    res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0')
+    next();
+  })
+
 app.use('/',homerouter);
 app.use('/admin',adminRoute)
-app.use((req,res,next)=>{
-    res.set('Cashe-Control ','no-store')
-    next()
-})
 
 
 app.listen(PORT,()=>{console.log(`http://localhost:${PORT}`)});
